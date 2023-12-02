@@ -1,31 +1,38 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+)
 
 var (
 	productList = ProductList{
 		{
-			Name:     "Non",
-			Price:    4_000,
-			Quantity: 10,
+			Name:          "Non",
+			Quantity:      10,
+			Price:         4_000,
+			OriginalPrice: 2_000,
 		},
 		{
-			Name:     "Cola",
-			Price:    13_000,
-			Quantity: 15,
+			Name:          "Cola",
+			Quantity:      15,
+			Price:         13_000,
+			OriginalPrice: 6_500,
 		},
 		{
-			Name:     "Nestle",
-			Price:    3_000,
-			Quantity: 20,
+			Name:          "Nestle",
+			Quantity:      20,
+			Price:         3_000,
+			OriginalPrice: 1_500,
 		},
 	}
 )
 
 type Product struct {
-	Name     string
-	Price    int
-	Quantity int
+	Name          string
+	Quantity      int
+	Price         int
+	OriginalPrice int
 }
 
 type ProductSellRequest struct {
@@ -33,14 +40,22 @@ type ProductSellRequest struct {
 	Quantity int
 }
 
-type ProductList []Product
-
 func NewProduct(name string, price, quantity int) Product {
 	return Product{
 		Name:     name,
 		Price:    price,
 		Quantity: quantity,
 	}
+}
+
+type ProductList []Product
+
+func (p *ProductList) AddProduct(product Product) {
+	*p = append(*p, product)
+}
+
+func (p *ProductList) RemoveProduct(index int) {
+	*p = append((*p)[:index], (*p)[index+1:]...)
 }
 
 func getProductInfo() ProductSellRequest {
@@ -60,4 +75,8 @@ func getProductInfo() ProductSellRequest {
 		Name:     productName,
 		Quantity: quantity,
 	}
+}
+
+func generateProductPrice(min, max int) int {
+	return rand.Intn(max-min) + min
 }

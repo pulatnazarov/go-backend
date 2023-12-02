@@ -21,9 +21,12 @@ func (r *Repository) Search(productName string) (Product, bool) {
 }
 
 func (r *Repository) TakeProduct(productName string, quantity int) {
-	for i, product := range r.Products {
+	for index, product := range r.Products {
 		if product.Name == productName {
-			r.Products[i].Quantity -= quantity
+			r.Products[index].Quantity -= quantity
+			if r.Products[index].Quantity == 0 {
+				r.Products.RemoveProduct(index)
+			}
 			return
 		}
 	}
