@@ -35,7 +35,7 @@ type ProductSellRequest struct {
 
 type ProductList []Product
 
-func (p Product) NewProduct(name string, price, quantity int) Product {
+func NewProduct(name string, price, quantity int) Product {
 	return Product{
 		Name:     name,
 		Price:    price,
