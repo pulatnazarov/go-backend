@@ -1,23 +1,25 @@
-package main
+package repository
+
+import "go-backend/store/product"
 
 type Repository struct {
-	Products ProductList
+	Products product.ProductList
 }
 
-func NewRepository(products ProductList) Repository {
+func NewRepository(products product.ProductList) Repository {
 	return Repository{
 		Products: products,
 	}
 }
 
-func (r *Repository) Search(productName string) (Product, bool) {
+func (r *Repository) Search(productName string) (product.Product, bool) {
 	for _, product := range r.Products {
 		if product.Name == productName {
 			return product, true
 		}
 	}
 
-	return Product{}, false
+	return product.Product{}, false
 }
 
 func (r *Repository) TakeProduct(productName string, quantity int) {

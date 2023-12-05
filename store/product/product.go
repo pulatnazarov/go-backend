@@ -1,4 +1,4 @@
-package main
+package product
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	productList = ProductList{
+	List = ProductList{
 		{
 			Name:          "Non",
 			Quantity:      10,
@@ -58,7 +58,7 @@ func (p *ProductList) RemoveProduct(index int) {
 	*p = append((*p)[:index], (*p)[index+1:]...)
 }
 
-func getProductInfo() ProductSellRequest {
+func GetProductInfo() ProductSellRequest {
 	var (
 		productName string
 		quantity    = 0
@@ -77,6 +77,6 @@ func getProductInfo() ProductSellRequest {
 	}
 }
 
-func generateProductPrice(min, max int) int {
+func GenerateProductPrice(min, max int) int {
 	return rand.Intn(max-min) + min
 }

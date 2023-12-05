@@ -1,10 +1,35 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"go-backend/store/basket"
+	"go-backend/store/customer"
+	"go-backend/store/product"
+	"go-backend/store/repository"
+	"go-backend/store/store"
+)
 
+const Password = "123"
+
+// Customer cmd
 const (
 	StartShopCmd = iota + 1
 	FinishShopCmd
+)
+
+// Main page cmd
+const (
+	BossCmd = iota + 1
+	CustomerCmd
+	UserQuitCmd
+)
+
+// Boss cmd
+const (
+	ReportCmd = iota + 1
+	ListCmd
+	BackCmd
+	QuitCmd
 )
 
 /* HOMEWORK
@@ -37,23 +62,72 @@ if 1 {
 */
 
 func main() {
-	repo := NewRepository(productList)
-	store := NewStore(repo)
+	repo := repository.NewRepository(product.List)
+	s := store.NewStore(repo)
 
 	for true {
-		var cmd int
+		var userCmd int
 		fmt.Print(`
 		Enter command:
-		1 - Start shopping
-		2 - Stop shopping
+		1 - Boss
+		2 - Customer
+		3 - Quit
 `)
-		fmt.Scan(&cmd)
+		fmt.Scan(&userCmd)
 
-		switch cmd {
-		case StartShopCmd:
-			store.printStats()
-			store.StartSell()
-		case FinishShopCmd:
+		switch userCmd {
+		case BossCmd:
+			var password string
+			fmt.Print("Enter password: ")
+			fmt.Scan(&password)
+			if password != Password {
+				fmt.Println("password is wrong")
+				return
+			}
+			fmt.Println("BOSS LOGIN")
+
+			fmt.Println(`
+		1 - Report
+		2 - Product List
+		3 - Back
+		4 - Quit
+`)
+			var bossCmd int
+			fmt.Print("Enter command: ")
+			fmt.Scan(&bossCmd)
+
+			switch bossCmd {
+			case ReportCmd:
+				fmt.Println("report selected by boss")
+			case ListCmd:
+				fmt.Println("list selected by boss")
+			case BackCmd:
+				fmt.Println("back selected by boss")
+			case QuitCmd:
+				fmt.Println("quit selected by boss")
+			}
+		case CustomerCmd:
+			b := basket.NewBasket()
+			name, cash := customer.GetCustomerInfo()
+			user := customer.NewCustomer(name, cash, b)
+
+			var userCmd int
+			fmt.Println(`
+			1 - start shopping
+			2 - my basket
+			3 - finish
+			4 - back
+			5 - quit
+`)
+			fmt.Scan(&userCmd)
+
+			switch userCmd {
+			case StartShopCmd:
+				s.StartSell(user)
+			case FinishShopCmd:
+				return
+			}
+		case UserQuitCmd:
 			return
 		default:
 			fmt.Println("There is not such kind of command!!!")

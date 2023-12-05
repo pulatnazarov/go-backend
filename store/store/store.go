@@ -1,19 +1,23 @@
-package main
+package store
 
 import (
 	"fmt"
+	"go-backend/store/customer"
+	"go-backend/store/dealer"
+	"go-backend/store/product"
+	"go-backend/store/repository"
 	"os"
 	"text/tabwriter"
 )
 
 type Store struct {
-	Dealer     Dealer
-	Repository Repository
+	Dealer     dealer.Dealer
+	Repository repository.Repository
 	Budget     int
 	Profit     int
 }
 
-func NewStore(repository Repository) Store {
+func NewStore(repository repository.Repository) Store {
 	return Store{
 		Repository: repository,
 		Budget:     10_000,
@@ -21,12 +25,12 @@ func NewStore(repository Repository) Store {
 	}
 }
 
-func (s *Store) StartSell() {
-	productSellRequest := getProductInfo()
+func (s *Store) StartSell(user customer.Customer) {
+	productSellRequest := product.GetProductInfo()
 
-	product, exists := s.Repository.Search(productSellRequest.Name)
+	p, exists := s.Repository.Search(productSellRequest.Name)
 	if !exists {
-		fmt.Printf("We do not have %s product\nWe will bring %s in the next time\n", productSellRequest.Name, productSellRequest.Name)
+		fmt.Printf("We do not have %s p\nWe will bring %s in the next time\n", productSellRequest.Name, productSellRequest.Name)
 
 		product, success := s.Dealer.ProvideProduct(productSellRequest.Name, s.Budget, productSellRequest.Quantity)
 		if !success {
@@ -41,14 +45,27 @@ func (s *Store) StartSell() {
 		return
 	}
 
-	if product.Quantity < productSellRequest.Quantity {
-		fmt.Printf("We do not have enought %s product, left %d\n", productSellRequest.Name, product.Quantity)
+	if user.Cash < p.Price*productSellRequest.Quantity {
+		fmt.Println("You don't have enough cash")
+		return
+	}
+
+	if p.Quantity < productSellRequest.Quantity {
+		fmt.Printf("We do not have enought %s p, left %d\n", productSellRequest.Name, p.Quantity)
 		return
 	}
 
 	s.Repository.TakeProduct(productSellRequest.Name, productSellRequest.Quantity)
 
-	s.Profit += productSellRequest.Quantity * (product.Price - product.OriginalPrice)
+	user.AddProduct(product.Product{
+		Name:     p.Name,
+		Quantity: productSellRequest.Quantity,
+		Price:    p.Price,
+	})
+
+	fmt.Println("user basket: ", user.Basket)
+
+	s.Profit += productSellRequest.Quantity * (p.Price - p.OriginalPrice)
 
 	s.printStats()
 }
