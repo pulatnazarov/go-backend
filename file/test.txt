@@ -1,0 +1,2 @@
+1. name - ism
+2. age - yosh
