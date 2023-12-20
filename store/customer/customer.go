@@ -6,6 +6,12 @@ import (
 	"go-backend/store/product"
 )
 
+type Person struct {
+	Name string
+	Age  int
+	LastName string
+}
+
 type Customer struct {
 	Name   string
 	Cash   int
