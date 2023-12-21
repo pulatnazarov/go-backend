@@ -52,3 +52,7 @@ func (i Inventory) GetAllCountries() ([]country.Country, error) {
 func (i Inventory) GetCountryByID(id string) (country.Country, error) {
 	return country.Country{}, nil
 }
+
+func (i Inventory) DeleteCountry(id string) error {
+	return nil
+}
