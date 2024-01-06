@@ -1,9 +1,7 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -32,12 +30,21 @@ func main() {
 	// PUT => body => update => response => return data || id
 	// DELETE => no body => id => response => return successefully deleted
 
+	http.HandleFunc("/register-user", func(w http.ResponseWriter, r *http.Request) {
+		//logic, db request body kelgan body save
+		w.WriteHeader(http.StatusCreated)
+		w.Write([]byte("your data saved"))
+	})
+
 	// http.HandleFunc("/generate", generate)
+	// http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	// 	w.Write([]byte("not found for example"))
+	// })
 
-	// fmt.Println("program is running ...")
-	// http.ListenAndServe("localhost:8080", nil)
+	fmt.Println("program is running ...")
+	http.ListenAndServe("localhost:8080", nil)
 
-	var name1, name2, name3 string
+	/*var name1, name2, name3 string
 
 	fmt.Print("enter name: ")
 	fmt.Scan(&name1, &name2, &name3)
@@ -66,6 +73,8 @@ func main() {
 		fmt.Println("error while sending request", err.Error())
 		return
 	}
+	fmt.Println("status code: ", response.StatusCode, response.Status)
+	fmt.Println("resp: ", response)
 
 	p := []Person{}
 
@@ -82,7 +91,7 @@ func main() {
 
 	for _, v := range p {
 		fmt.Println(v.Age, v.Name, v.Count)
-	}
+	}*/
 }
 
 type Person struct {
