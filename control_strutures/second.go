@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 var (
 	A = 'A'
 )
@@ -12,7 +10,7 @@ func main() {
 	// var a = 0
 	// fmt.Print("a is: ")
 	// fmt.Scan(&a)
-	
+
 	// switch
 	// switch a {
 	// case 1, 3, 5, 7, 9:
@@ -35,7 +33,7 @@ func main() {
 	// case a > 2:
 	// 	fmt.Println("a equals to 2")
 	// default:
-	// 	fmt.Println("entered to default case")		
+	// 	fmt.Println("entered to default case")
 	// }
 
 	// for
