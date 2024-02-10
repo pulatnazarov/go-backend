@@ -41,6 +41,14 @@ func TestDivision(t *testing.T) {
 			},
 			want: "can not divide by 0",
 		},
+		{
+			name: "when x = 0",
+			args: args{
+				x: 0.0,
+				y: 130,
+			},
+			want: 0.0,
+		},
 	}
 
 	for _, tt := range testCases {
